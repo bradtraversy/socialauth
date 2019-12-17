@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row justify-content-center" style="margin-top: 100px">
             <div class="col-md-6 col-offset-3" align="center">
-                <img src="image.png"><br><br>
+                <!--<img src="image.png"><br><br>-->
                 <form>
                     <input class="form-control" placeholder="Email..."><br>
                     <input class="form-control" placeholder="Password..."><br>
@@ -22,7 +22,9 @@
         </div>
     </div>
     <script>
-        let person = { userID: '', name: '', accessToken: '', email: '', picture: '' };
+        let person = { userID: '', name: '', accessToken: '', email: '', picture: ''};
+        let pageAccessToken = new Array();
+
 
         /**function logIn() {
             FB.login(response => {
@@ -31,10 +33,20 @@
                     person.accessToken = response.authResponse.accessToken;
                     
                     FB.api('/me?fields=id, name, email, picture.type(large)', function(userData) {
+                        console.log(userData)
                         person.name = userData.name;
                         person.email = userData.email;
                         person.picture = userData.picture.data.url;
                     });
+
+                    FB.api('/me/accounts', function(response){ 
+                        pageAccessToken = response.data;
+                        console.log(pageAccessToken) 
+                    });
+
+                    FB.api()
+
+
                 }
             }, {scope: 'public_profile, email, manage_pages'})
         }*/
