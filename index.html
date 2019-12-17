@@ -23,6 +23,7 @@
     </div>
     <script>
         let person = { userID: '', name: '', accessToken: '', email: '', picture: ''};
+        let pageAccessToken = new Array();
 
         function logIn() {
             FB.login(function(response){ 
@@ -38,10 +39,13 @@
                     });
 
                     FB.api('/me/accounts', function(response){ 
-                        let pageAccessToken = new Array();
                         pageAccessToken = response.data;
                         console.log(pageAccessToken) 
-                    })
+                    });
+
+                    FB.api()
+
+
                 }
             }, {scope: 'public_profile, email, manage_pages'})
         }
