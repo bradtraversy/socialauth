@@ -26,8 +26,9 @@
         let pageAccessToken, conversationsData, messages = new Array();
         let access_token, pageID;
 
-        function logIn() {
-            FB.login(function(response){ 
+
+        /**function logIn() {
+            FB.login(response => {
                 if(response.status == "connected") {
                     person.userID = response.authResponse.userID;
                     person.accessToken = response.authResponse.accessToken;
@@ -58,6 +59,19 @@
                     });     
                 }
             }, {scope: 'public_profile, email, manage_pages, pages_show_list, pages_messaging'})
+            }, {scope: 'public_profile, email, manage_pages'})
+        }*/
+
+        function logIn() {
+            FB.login(function(response){ 
+            FB.api('/me/accounts', function(response){ 
+                console.log(response)
+                let p_accessToken = response.data[0].access_token; 
+                let p_name = response.data[0].name; 
+                console.log('The pagename is:'
+                        + p_name + 'Page access token is' 
+                        + p_accessToken);})
+            ;}, {scope:"manage_pages"}); 
         }
 
         window.fbAsyncInit = function() {
