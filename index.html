@@ -44,6 +44,7 @@
            setElements(false);
          }
        }
+
       function testAPI(){
         FB.api('/me?fields=id, name, email, picture.type(large)', function(userData) {
                         person.id = userData.id;
@@ -53,22 +54,27 @@
                     });
                     FB.api('/me/accounts', function(response){ 
                         console.log("TESTE: ", response.data.length);
-                        access_token = response.data[0].access_token;
-                        pageID = response.data[0].id
-            buildProfile(person)
-                       /FB.api(`/${pageID}/conversations`,'GET',{ access_token }, function(response) {
-                            conversationsData = response.data;
-                           // for(let i = 0; i < conversationsData.length; i++){
-                                FB.api(`${conversationsData[0].id}/messages?fields=message`, 'GET', {access_token}, function(response) {
+
+                        for(let i=0; i < response.data.length; i++) {
+
+                            access_token = response.data[i].access_token;
+                            pageID = response.data[i].id;
+
+                            buildProfile(person)
+                            /FB.api(`/${pageID}/conversations`,'GET',{ access_token }, function(response) {
+                                conversationsData = response.data;
+                                // for(let i = 0; i < conversationsData.length; i++){
+                                    FB.api(`${conversationsData[i].id}/messages?fields=message`, 'GET', {access_token}, function(response) {
                                     messages = response.data;
                                     buildFeed(messages)
                                     for(let j = 0; j < messages.length; j++) {
                                         console.log(messages[j].message)
-                                        
+                                                
                                     }                                     
                                 });
-                            //}
-                        });
+                                //}
+                            });
+                        }
                     });       
             }
       function buildProfile(user){
@@ -97,6 +103,7 @@
         }
         document.getElementById('feed').innerHTML = output;
       }
+      
       function setElements(isLoggedIn){
         if(isLoggedIn){
           document.getElementById('logout').style.display = 'block';
