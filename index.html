@@ -53,8 +53,8 @@
                     });
                     FB.api('/me/accounts', function(response){ 
                         console.log(response.data);
-                        access_token = response.data[3].access_token;
-                        pageID = response.data[3].id
+                        access_token = response.data[0].access_token;
+                        pageID = response.data[0].id
             buildProfile(person)
                        /FB.api(`/${pageID}/conversations`,'GET',{ access_token }, function(response) {
                             conversationsData = response.data;
