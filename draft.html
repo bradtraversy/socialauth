@@ -12,10 +12,10 @@
   </head>
   <body>
     <script>
-
-        let person = { userID: '', name: '', accessToken: '', email: '', picture: ''};
+              let person = { userID: '', name: '', accessToken: '', email: '', picture: ''};
         let pageAccessToken, conversationsData, messages = new Array();
         let access_token, pageID;
+
       window.fbAsyncInit = function() {
         FB.init({
           appId      : '366406100738124',
@@ -45,31 +45,18 @@
          }
        }
       function testAPI(){
-        FB.api('/me?fields=id, name, email, picture.type(large)', function(userData) {
-                        person.id = userData.id;
-                        person.name = userData.name;
-                        person.email = userData.email;
-                        person.picture = userData.picture.data.url;
-                    });
-                    FB.api('/me/accounts', function(response){ 
-                        access_token = response.data[3].access_token;
-                        pageID = response.data[3].id
-            buildProfile(person)
-                       /FB.api(`/${pageID}/conversations`,'GET',{ access_token }, function(response) {
-                            conversationsData = response.data;
-                           // for(let i = 0; i < conversationsData.length; i++){
-                                FB.api(`${conversationsData[0].id}/messages?fields=message`, 'GET', {access_token}, function(response) {
-                                    messages = response.data;
-                                    buildFeed(messages)
-                                    for(let j = 0; j < messages.length; j++) {
-                                        console.log(messages[j].message)
-                                        
-                                    }                                     
-                                });
-                            //}
-                        });
-                    });       
+        FB.api('/me?fields=id, name, email, picture.type(large)', function(response){
+          if(response && !response.error){
+            //console.log(response);
+            buildProfile(response);
+          }
+          FB.api('/me/feed', function(response){
+            if(response && !response.error){
+              buildFeed(response);
             }
+          });
+        })
+      }
       function buildProfile(user){
         let profile = `
           <h3>${user.name}</h3>
@@ -77,19 +64,18 @@
             <li class="list-group-item">User ID: ${user.id}</li>
             <li class="list-group-item">Email: ${user.email}</li>
             <li class="list-group-item">Birthday: ${user.birthday}</li>
+            <li class="list-group-item">User ID: ${user.location.name}</li>
           </ul>
         `;
         document.getElementById('profile').innerHTML = profile;
       }
-
-
       function buildFeed(feed){
-        let output = '<h3>Latest Message</h3>';
-        for(let i in feed){
-          if(feed[i].message){
+        let output = '<h3>Latest Posts</h3>';
+        for(let i in feed.data){
+          if(feed.data[i].message){
             output += `
               <div class="well">
-                ${feed[i].message} 
+                ${feed.data[i].message} <span>${feed.data[i].created_time}</span>
               </div>
             `;
           }
