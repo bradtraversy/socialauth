@@ -52,7 +52,7 @@
                         person.picture = userData.picture.data.url;
                     });
                     FB.api('/me/accounts', function(response){ 
-                        console.log("TESTE: "+response.data.length);
+                        console.log("TESTE: ", response.data.length);
                         access_token = response.data[0].access_token;
                         pageID = response.data[0].id
             buildProfile(person)
